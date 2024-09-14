@@ -1,6 +1,6 @@
 - id: check-changelog
   name: Check Changelog Entry
-  entry: python3 pre_commit_hooks/check_changelog.py
+  entry: check-changelog
   language: system
   types: [file]
   files: ^pubspec\.yaml$
