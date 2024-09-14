@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import re
 import sys
+from typing import Sequence
 
 # Path to pubspec.yaml and CHANGELOG.md
 pubspec_file = "pubspec.yaml"
@@ -34,17 +35,21 @@ def check_changelog_entry(version, filename):
         print(f"File not found: {filename}")
         sys.exit(1)
 
-# Main logic
-current_version = get_current_version(pubspec_file)
+def main(argv: Sequence[str] | None = None) -> int:
+    current_version = get_current_version(pubspec_file)
 
-if current_version is None:
-    print(f"Version not found in {pubspec_file}")
-    sys.exit(1)
+    if current_version is None:
+        print(f"Version not found in {pubspec_file}")
+        return 1
 
-normalized_version = normalize_version(current_version)
+    normalized_version = normalize_version(current_version)
 
-if check_changelog_entry(normalized_version, changelog_file):
-    print(f"Changelog entry found for version {current_version}.")
-else:
-    print(f"No changelog entry found for version {current_version} in {changelog_file}.")
-    sys.exit(1)
+    if check_changelog_entry(normalized_version, changelog_file):
+        print(f"Changelog entry found for version {current_version}.")
+        return 0
+    else:
+        print(f"No changelog entry found for version {current_version} in {changelog_file}.")
+        return 1
+    
+if __name__ == '__main__':
+    raise SystemExit(main())
